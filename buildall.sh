@@ -53,21 +53,6 @@ else
   PYTHON_VERSION=2.7.10 build_fake_package "python"
 fi
 
-################################################################################
-# LLVM
-################################################################################
-# Build LLVM 3.3 with and without asserts.
-# For LLVM 3.3, the default is a release build with assertions. The assertions
-# are disabled by including "no-asserts" in the version string.
-LLVM_VERSION=3.3-p1 $SOURCE_DIR/source/llvm/build.sh
-LLVM_VERSION=3.3-no-asserts-p1 $SOURCE_DIR/source/llvm/build.sh
-
-# Build LLVM 3.7.0 and 3.8.0 without assertions. For LLVM 3.7+, the default is a
-# release build with no assertions.
-PYTHON_VERSION=2.7.10 LLVM_VERSION=3.7.0 $SOURCE_DIR/source/llvm/build.sh
-PYTHON_VERSION=2.7.10 LLVM_VERSION=3.8.0 $SOURCE_DIR/source/llvm/build.sh
-PYTHON_VERSION=2.7.10 LLVM_VERSION=3.8.0-p1 $SOURCE_DIR/source/llvm/build.sh
-PYTHON_VERSION=2.7.10 LLVM_VERSION=3.8.0-asserts-p1 $SOURCE_DIR/source/llvm/build.sh
 
 ################################################################################
 # SASL
@@ -104,12 +89,6 @@ export ZLIB_VERSION=1.2.8
 export OPENSSL_VERSION=1.0.1p
 
 if [[ ! "$OSTYPE" == "darwin"* ]]; then
-  THRIFT_VERSION=0.9.0-p2 $SOURCE_DIR/source/thrift/build.sh
-  THRIFT_VERSION=0.9.0-p4 $SOURCE_DIR/source/thrift/build.sh
-  THRIFT_VERSION=0.9.0-p5 $SOURCE_DIR/source/thrift/build.sh
-  # 0.9.0-p6 is a revert of -p5 patch. It doesn't need to be built.
-  # It is equivalent to p4 and is needed for subsequent patches.
-  THRIFT_VERSION=0.9.0-p7 $SOURCE_DIR/source/thrift/build.sh
   THRIFT_VERSION=0.9.0-p8 $SOURCE_DIR/source/thrift/build.sh
 else
   BOOST_VERSION=1.57.0 THRIFT_VERSION=0.9.2-p2 $SOURCE_DIR/source/thrift/build.sh
@@ -176,7 +155,6 @@ OPENLDAP_VERSION=2.4.25 $SOURCE_DIR/source/openldap/build.sh
 ################################################################################
 # Build Avro
 ################################################################################
-AVRO_VERSION=1.7.4-p3 $SOURCE_DIR/source/avro/build.sh
 AVRO_VERSION=1.7.4-p4 $SOURCE_DIR/source/avro/build.sh
 
 ################################################################################
@@ -187,17 +165,7 @@ RAPIDJSON_VERSION=0.11 $SOURCE_DIR/source/rapidjson/build.sh
 ################################################################################
 # Build BZip2
 ################################################################################
-BZIP2_VERSION=1.0.6-p1 $SOURCE_DIR/source/bzip2/build.sh
 BZIP2_VERSION=1.0.6-p2 $SOURCE_DIR/source/bzip2/build.sh
-
-################################################################################
-# Build GDB
-################################################################################
-if [[ ! "$RELEASE_NAME" =~ CentOS.*5\.[[:digit:]] ]]; then
-  GDB_VERSION=7.9.1 $SOURCE_DIR/source/gdb/build.sh
-else
-  GDB_VERSION=7.9.1 build_fake_package "gdb"
-fi
 
 ################################################################################
 # Build Libunwind
@@ -214,23 +182,10 @@ BREAKPAD_VERSION=20150612-p1 $SOURCE_DIR/source/breakpad/build.sh
 ################################################################################
 (
   export BOOST_VERSION=1.57.0
-  export KUDU_VERSION=
-  for KUDU_VERSION in 0.8.0-RC1 0.9.0-RC1 0.10.0-RC1
-  do
-    if $SOURCE_DIR/source/kudu/build.sh is_supported_platform; then
-      $SOURCE_DIR/source/kudu/build.sh build
-    else
-      build_fake_package kudu
-    fi
-  done
+  export KUDU_VERSION=1.0.0-RC1
+  if $SOURCE_DIR/source/kudu/build.sh is_supported_platform; then
+    $SOURCE_DIR/source/kudu/build.sh build
+  else
+    build_fake_package kudu
+  fi
 )
-
-################################################################################
-# Build TPC-H
-################################################################################
-TPC_H_VERSION=2.17.0 $SOURCE_DIR/source/tpc-h/build.sh
-
-################################################################################
-# Build TPC-DS
-################################################################################
-TPC_DS_VERSION=2.1.0 $SOURCE_DIR/source/tpc-ds/build.sh

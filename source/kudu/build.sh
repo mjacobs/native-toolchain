@@ -154,7 +154,7 @@ function install_kudu {
   rm -rf "$INSTALL_DIR/bin"
   mkdir -p "$INSTALL_DIR/bin"
   pushd bin
-  for F in kudu-* cfile-dump log-dump; do
+  for F in kudu-* ; do
     cp $F "$INSTALL_DIR/bin"
   done
   popd
