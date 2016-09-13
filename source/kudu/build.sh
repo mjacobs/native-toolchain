@@ -46,10 +46,8 @@ function is_supported_platform {
   set -u
   case "$OS_NAME" in
     rhel) [[ "$OS_VERSION" -ge 6 ]];;
-    ubuntu) [[ "$OS_VERSION" -ge 14 ]];;
-
-    # SUSE and Debian are known to fail.
-    suse | debian) false;;
+    suse) [[ "$OS_VERSION" -ge 12 ]];;
+    debian) [[ "$OS_VERSION" -ge 7 ]];;
 
     # For any other OS just assume it'll work.
     *) true;;
